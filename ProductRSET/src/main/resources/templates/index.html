@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Spring Boot API Demo</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$.ajax({
+			url : "/products",
+			method : "GET",
+			success : function(data) {
+				var list = "";
+				$("#pList tbody tr").remove();
+				$.each(data, function(index, d) {
+					list += "<tr id='row"+d.id+"'>";
+					list += "<td>" + (index + 1) + "</td>";
+					list += "<td>" + d.name + "</td>";
+					list += "<td>" + d.price + "</td>";
+					 list += "<td><a href='/product?id="+d.id+"'>Edit</a>|<a href='javascript:void()' onclick='deleteProduct("+d.id+")'>Delete</a></td>"; 
+					
+					list += "</tr>";
+				});
+				$("#pList tbody").append(list);
+			},
+			error : function(err) {
+				alert("Error");
+			}
+		});
+
+	});
+	 function deleteProduct(pId){
+		$.ajax({
+			url:"/products/"+pId,
+			method:"delete",
+			success:function(data){
+				$("#row"+pId).remove();
+				alert("deletetd successfully");
+			},
+			error:function(err){
+				alert("failed");
+			}
+		});
+		
+	} 
+</script>
+</head>
+<body>
+	<a href="/product">Add Product</a>
+	<table id="pList" border="1" align="center">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Price</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+
+		</tbody>
+	</table>
+</body>
+</html>
